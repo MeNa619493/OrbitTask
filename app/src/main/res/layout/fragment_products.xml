@@ -8,18 +8,6 @@
     android:background="@color/white"
     tools:context=".view.products.view.ProductsFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/tb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:title="Products"
-        app:titleCentered="true"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_products"
         android:layout_width="match_parent"
@@ -32,7 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb" />
+        app:layout_constraintTop_toTopOf="" Of="parent" />
 
     <TextView
         android:id="@+id/tv_empty"
@@ -40,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:gravity="center_horizontal"
-        android:maxLines="3"
         android:padding="8dp"
         android:text="@string/empty_message"
         android:textColor="@color/black"

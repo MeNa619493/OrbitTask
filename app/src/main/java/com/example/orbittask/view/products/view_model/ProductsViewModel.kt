@@ -1,10 +1,12 @@
 package com.example.orbittask.view.products.view_model
 
 import androidx.lifecycle.ViewModel
+import com.example.orbittask.data.models.Product
 import com.example.orbittask.domain.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
@@ -16,9 +18,11 @@ class ProductsViewModel @Inject constructor(
 
     override val container = container<ProductListState, NavigationEvent>(
         initialState = ProductListState(loading = true)
-    )
+    ) {
+        loadOverviews()
+    }
 
-    fun loadOverviews() = intent {
+    private fun loadOverviews() = intent {
         runCatching {
             val overviews = getProductsUseCase()
 
@@ -30,5 +34,9 @@ class ProductsViewModel @Inject constructor(
                 state.copy(loading = false, error = exception.message)
             }
         }
+    }
+
+    fun onProductClicked(id: Int) = intent {
+        postSideEffect(OpenProductNavigationEvent(id))
     }
 }

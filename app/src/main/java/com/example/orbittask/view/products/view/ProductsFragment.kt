@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.orbittask.data.models.Product
 import com.example.orbittask.databinding.FragmentProductsBinding
 import com.example.orbittask.view.products.adapter.ProductsAdapter
 import com.example.orbittask.view.products.view_model.NavigationEvent
+import com.example.orbittask.view.products.view_model.OpenProductNavigationEvent
 import com.example.orbittask.view.products.view_model.ProductListState
 import com.example.orbittask.view.products.view_model.ProductsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +25,7 @@ class ProductsFragment : Fragment() {
     private val viewModel: ProductsViewModel by viewModels()
     private val adapter by lazy {
         ProductsAdapter {
-
+            viewModel.onProductClicked(it.id ?: 0)
         }
     }
 
@@ -38,10 +40,8 @@ class ProductsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvProducts.adapter = adapter
-
         viewModel.observe(viewLifecycleOwner, state = ::render, sideEffect = ::sideEffect)
-        viewModel.loadOverviews()
+        binding.rvProducts.adapter = adapter
     }
 
     private fun render(state: ProductListState) {
@@ -81,7 +81,15 @@ class ProductsFragment : Fragment() {
     }
 
     private fun sideEffect(sideEffect: NavigationEvent) {
-
+        when (sideEffect) {
+            is OpenProductNavigationEvent ->
+                findNavController().navigate(
+                    ProductsFragmentDirections
+                        .actionProductsFragmentToProductDetailsFragment(
+                            sideEffect.id
+                        )
+                )
+        }
     }
 
     override fun onDestroyView() {
